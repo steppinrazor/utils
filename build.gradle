@@ -1,0 +1,41 @@
+plugins {
+    id 'me.champeau.gradle.jmh' version '0.3.0'
+}
+
+apply plugin: 'java'
+apply plugin: 'me.champeau.gradle.jmh'
+
+group 'krs'
+version '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'org.testng', name: 'testng', version: '6.9.10'
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.3.0'
+    //mockito is used in a test helper class
+    compile 'org.mockito:mockito-core:2.0.43-beta'
+    compile 'org.slf4j:slf4j-simple:1.7.16'
+    compile 'com.google.guava:guava:19.0'
+    compile 'com.google.code.findbugs:jsr305:3.0.1'
+    compile 'org.openjdk.jmh:jmh-core:1.11.3'
+}
+
+jmh {
+    iterations = 5
+    benchmarkMode = 'all'
+    fork = 4
+    //forceGC = true
+    humanOutputFile = project.file("${project.buildDir}/reports/jmh/human.txt")
+    resultsFile = project.file("${project.buildDir}/reports/jmh/results.txt")
+    resultFormat = 'JSON'
+    threads = 1
+    timeUnit = 'ms'
+    warmupIterations = 5
+    verbosity = 'EXTRA'
+    jvmArgs = '-server'
+    operationsPerInvocation = 1000
+}
